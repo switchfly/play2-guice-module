@@ -4,8 +4,8 @@ import play.Project._
 
 object ApplicationBuild extends Build {
 
-  val appName         = "play2-guice-module"
-  val appVersion      = "0.1-SNAPSHOT"
+  val appName = "play2-guice-module"
+  val appVersion = "0.1-SNAPSHOT"
 
   val appDependencies = Seq(
     javaCore,
@@ -21,6 +21,14 @@ object ApplicationBuild extends Build {
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
+    organization := "com.switchfly",
+
+    // disable publishing the main API jar to work around
+    //   https://play.lighthouseapp.com/projects/82401/tickets/898-javadoc-error-invalid-flag-g-when-publishing-new-module-local
+    //   https://play.lighthouseapp.com/projects/82401/tickets/710-publish-local-is-broken
+    publishArtifact in(Compile, packageDoc) := false,
+
+    credentials += Credentials(Path.userHome / ".ivy2" / "switchfly.nexus.credentials")
   )
 
 }
